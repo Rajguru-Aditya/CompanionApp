@@ -15,30 +15,60 @@ import ProfileCard from './src/components/ProfileCard/ProfileCard';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  withSpring,
+  useAnimatedGestureHandler,
 } from 'react-native-reanimated';
+import {
+  PanGestureHandler,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
 
 const App = () => {
-  const sharedValue = useSharedValue(1);
+  const translateX = useSharedValue(0);
   const cardStyle = useAnimatedStyle(() => ({
-    opacity: sharedValue.value,
+    transform: [
+      {
+        translateX: translateX.value,
+      },
+    ],
   }));
 
+  const gestureHandler = useAnimatedGestureHandler({
+    onStart: (event, context) => {
+      context.startX = translateX.value;
+    },
+    onActive: (event, context) => {
+      translateX.value = context.startX + event.translationX;
+      console.log('onActive');
+    },
+    onEnd: event => {
+      if (event.translationX < -100) {
+        translateX.value = withSpring(-500);
+      } else if (event.translationX > 100) {
+        translateX.value = withSpring(500);
+      } else {
+        translateX.value = withSpring(0);
+      }
+    },
+  });
+
   return (
-    <View style={styles.pageContainer}>
-      <Animated.View style={[styles.animatedCard, cardStyle]}>
-        {/* {users?.map((user, index) => ( */}
-        <ProfileCard
-          img={'user.image'}
-          name={'user.name'}
-          bio={'user.bio'}
-          id={'user.id'}
-        />
-        {/* ))} */}
-      </Animated.View>
-      <Pressable onPress={() => (sharedValue.value = Math.random())}>
-        <Text>Change Value</Text>
-      </Pressable>
-    </View>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <View style={styles.pageContainer}>
+        <PanGestureHandler onGestureEvent={gestureHandler}>
+          <Animated.View style={[styles.animatedCard, cardStyle]}>
+            {/* {users?.map((user, index) => ( */}
+            <ProfileCard
+              img={users[0].image}
+              name={'user.name'}
+              bio={'user.bio'}
+              id={'user.id'}
+            />
+            {/* ))} */}
+          </Animated.View>
+        </PanGestureHandler>
+      </View>
+    </GestureHandlerRootView>
   );
 };
 
