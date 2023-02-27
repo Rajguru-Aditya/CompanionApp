@@ -2,17 +2,17 @@ import {Text, View, Image, ImageBackground, StyleSheet} from 'react-native';
 import React from 'react';
 import styles from './styles';
 
-const ProfileCard = props => {
+const ProfileCard = ({user}) => {
   return (
-    <View style={styles.card} key={props.id}>
+    <View style={styles.card} key={user?.id}>
       <ImageBackground
         source={{
-          uri: props.img,
+          uri: user?.image || '',
         }}
         style={styles.image}>
         <View style={styles.cardInner}>
-          <Text style={styles.name}>{props.name}</Text>
-          <Text style={styles.bio}>{props.bio}</Text>
+          <Text style={styles.name}>{user?.name}</Text>
+          <Text style={styles.bio}>{user?.bio}</Text>
         </View>
       </ImageBackground>
     </View>
