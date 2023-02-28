@@ -1,8 +1,8 @@
 import {StyleSheet, Text, View} from 'react-native';
 const styles = StyleSheet.create({
   card: {
-    width: '95%',
-    height: '70%',
+    width: '100%',
+    height: '100%',
     borderRadius: 10,
     // Shadow
     shadowColor: '#000',

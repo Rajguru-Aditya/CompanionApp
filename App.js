@@ -27,6 +27,9 @@ import {
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 
+import Like from './assets/images/LIKE.png';
+import Nope from './assets/images/nope.png';
+
 const ROTATION = 60;
 const SWIPE_VELOCITY = 800;
 
@@ -73,13 +76,20 @@ const App = () => {
     ),
   }));
 
+  const likeStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(translateX.value, [0, hiddenTranslateX / 5], [0, 1]),
+  }));
+
+  const nopeStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(translateX.value, [0, -hiddenTranslateX / 5], [0, 1]),
+  }));
+
   const gestureHandler = useAnimatedGestureHandler({
     onStart: (event, context) => {
       context.startX = translateX.value;
     },
     onActive: (event, context) => {
       translateX.value = context.startX + event.translationX;
-      console.log('onActive');
     },
     onEnd: event => {
       // if (event.translationX < -100) {
@@ -118,9 +128,15 @@ const App = () => {
         {currentProfile && (
           <PanGestureHandler onGestureEvent={gestureHandler}>
             <Animated.View style={[styles.animatedCard, cardStyle]}>
-              {/* {users?.map((user, index) => ( */}
+              <Animated.Image
+                source={Like}
+                style={[styles.like, {left: 10}, likeStyle]}
+              />
+              <Animated.Image
+                source={Nope}
+                style={[styles.like, {right: 10}, nopeStyle]}
+              />
               <ProfileCard user={currentProfile} />
-              {/* ))} */}
             </Animated.View>
           </PanGestureHandler>
         )}
@@ -137,16 +153,24 @@ const styles = StyleSheet.create({
     // backgroundColor: 'white',
   },
   animatedCard: {
-    width: '100%',
+    width: '90%',
+    height: '70%',
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
   },
   nextCardContainer: {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     ...StyleSheet.absoluteFillObject,
+  },
+  like: {
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
+    position: 'absolute',
+    top: 10,
+    zIndex: 1,
   },
 });
 
