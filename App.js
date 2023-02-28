@@ -5,25 +5,13 @@ import users from './assets/data/users';
 import ProfileCard from './src/components/ProfileCard/ProfileCard';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import AnimatedStack from './src/components/AnimatedStack/AnimatedStack';
+import HomeScreen from './src/screens/HomeScreen/HomeScreen';
+import MatchesScreen from './src/screens/MatchesScreen/MatchesScreen';
 
 const App = () => {
-  const onSwipeLeft = user => {
-    console.warn('swipe left', user.name);
-  };
-  const onSwipeRight = user => {
-    console.warn('swipe right', user.name);
-  };
-
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <View style={styles.root}>
-        <AnimatedStack
-          data={users}
-          renderItem={({item}) => <ProfileCard user={item} />}
-          onSwipeLeft={onSwipeLeft}
-          onSwipeRight={onSwipeRight}
-        />
-      </View>
+    <GestureHandlerRootView style={styles.root}>
+      <MatchesScreen />
     </GestureHandlerRootView>
   );
 };
@@ -33,7 +21,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    // backgroundColor: 'white',
+    backgroundColor: 'white',
   },
 });
 
