@@ -7,7 +7,7 @@ const MatchesScreen = () => {
   return (
     <SafeAreaView style={styles.root}>
       <View>
-        <Text style={styles.heading}>New matches MatchesScreen</Text>
+        <Text style={styles.heading}>New Matches</Text>
         <View style={styles.users}>
           {users.map(user => (
             <View style={styles.user}>
