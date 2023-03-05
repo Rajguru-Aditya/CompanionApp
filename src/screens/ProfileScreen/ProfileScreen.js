@@ -13,7 +13,6 @@ import styles from './styles';
 import users from '../../../assets/data/users';
 import {Auth} from 'aws-amplify';
 import {DataStore} from '@aws-amplify/datastore';
-// import {User} from './models';
 import {User} from '../../models';
 import {Picker} from '@react-native-picker/picker';
 
@@ -70,14 +69,12 @@ const ProfileScreen = () => {
     }
 
     if (user) {
-      const updatedUser = await DataStore.save(
-        User.copyOf(user, updated => {
-          updated.name = name;
-          updated.bio = bio;
-          updated.gender = gender;
-          updated.lookingFor = lookingFor;
-        }),
-      );
+      const updatedUser = User.copyOf(user, updated => {
+        updated.name = name;
+        updated.bio = bio;
+        updated.gender = gender;
+        updated.lookingFor = lookingFor;
+      });
 
       await DataStore.save(updatedUser);
     } else {
@@ -120,7 +117,6 @@ const ProfileScreen = () => {
           <Picker
             style={{color: '#000', placeholderTextColor: '#000'}}
             selectedValue={gender}
-            prompt="Gender"
             onValueChange={itemValue => handleChangeGender(itemValue)}>
             <Picker.Item label="Select your gender" value="0" />
             <Picker.Item label="Male" value="MALE" />
@@ -133,7 +129,6 @@ const ProfileScreen = () => {
           <Picker
             style={{color: '#000', placeholderTextColor: '#000'}}
             selectedValue={lookingFor}
-            prompt="Looking For"
             onValueChange={itemValue => handleChangeLookingFor(itemValue)}>
             <Picker.Item label="Select your preference" value="0" />
             <Picker.Item label="Male" value="MALE" />

@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     width: '100%',
     padding: 10,
+    paddingBottom: 30,
   },
   icon: {
     padding: 10,

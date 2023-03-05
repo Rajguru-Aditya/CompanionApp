@@ -1,6 +1,7 @@
 import {Text, View, Image, ImageBackground, StyleSheet} from 'react-native';
 import React from 'react';
 import styles from './styles';
+import LinearGradient from 'react-native-linear-gradient';
 
 const ProfileCard = ({user}) => {
   return (
@@ -10,10 +11,12 @@ const ProfileCard = ({user}) => {
           uri: user?.image || '',
         }}
         style={styles.image}>
-        <View style={styles.cardInner}>
+        <LinearGradient
+          colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
+          style={styles.cardInner}>
           <Text style={styles.name}>{user?.name}</Text>
           <Text style={styles.bio}>{user?.bio}</Text>
-        </View>
+        </LinearGradient>
       </ImageBackground>
     </View>
   );

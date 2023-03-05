@@ -1,4 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 const styles = StyleSheet.create({
   card: {
     width: '100%',
@@ -24,6 +25,7 @@ const styles = StyleSheet.create({
   },
   cardInner: {
     padding: 10,
+    backgroundColor: 'rgba(52, 52, 52, 0.5)',
   },
   name: {
     fontSize: 30,

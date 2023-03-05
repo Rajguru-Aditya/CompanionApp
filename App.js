@@ -29,7 +29,7 @@ const App = () => {
   const color = '#b5b5b5';
   const activeColor = '#F47C7C';
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+    <SafeAreaView style={styles.safeArea}>
       <GestureHandlerRootView style={styles.root}>
         <View style={styles.topNav}>
           <Pressable onPress={() => setActiveScreen('HOME')}>
@@ -70,6 +70,11 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingBottom: 20,
+  },
   root: {
     justifyContent: 'center',
     alignItems: 'center',
