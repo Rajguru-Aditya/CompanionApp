@@ -6,6 +6,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
   },
+  container: {
+    padding: 10,
+  },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',

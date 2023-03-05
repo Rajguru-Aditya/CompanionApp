@@ -6,7 +6,7 @@ import users from '../../../assets/data/users';
 const MatchesScreen = () => {
   return (
     <SafeAreaView style={styles.root}>
-      <View>
+      <View style={styles.container}>
         <Text style={styles.heading}>New Matches</Text>
         <View style={styles.users}>
           {users.map(user => (

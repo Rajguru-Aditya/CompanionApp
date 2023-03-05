@@ -1,16 +1,22 @@
 import 'react-native-gesture-handler';
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, SafeAreaView, Pressable} from 'react-native';
+import {Amplify} from 'aws-amplify';
+import config from './src/aws-exports';
+import {withAuthenticator} from 'aws-amplify-react-native';
 import users from './assets/data/users';
 import ProfileCard from './src/components/ProfileCard/ProfileCard';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import AnimatedStack from './src/components/AnimatedStack/AnimatedStack';
 import HomeScreen from './src/screens/HomeScreen/HomeScreen';
 import MatchesScreen from './src/screens/MatchesScreen/MatchesScreen';
+import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
+Amplify.configure(config);
 
 const App = () => {
   const [activeScreen, setActiveScreen] = useState('HOME');
@@ -52,6 +58,7 @@ const App = () => {
         </View>
         {activeScreen === 'HOME' && <HomeScreen />}
         {activeScreen === 'MATCH' && <MatchesScreen />}
+        {activeScreen === 'PROFILE' && <ProfileScreen />}
       </GestureHandlerRootView>
     </SafeAreaView>
   );
@@ -73,4 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default withAuthenticator(App);
