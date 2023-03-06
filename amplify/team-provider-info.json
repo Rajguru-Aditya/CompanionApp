@@ -10,6 +10,14 @@
       "StackName": "amplify-pickapal-staging-100115",
       "StackId": "arn:aws:cloudformation:ap-south-1:703653434596:stack/amplify-pickapal-staging-100115/80b081d0-ba73-11ed-9c5c-06320e5c4e8e",
       "AmplifyAppId": "daws6ova434w1"
+    },
+    "categories": {
+      "auth": {
+        "PickAPal": {}
+      },
+      "api": {
+        "PickAPal": {}
+      }
     }
   }
 }

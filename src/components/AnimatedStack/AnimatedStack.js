@@ -24,13 +24,13 @@ const ROTATION = 60;
 const SWIPE_VELOCITY = 800;
 
 const AnimatedStack = props => {
-  const {data, renderItem, onSwipeRight, onSwipeLeft} = props;
-  const userData = JSON.parse(JSON.stringify(data));
+  const {data, renderItem, onSwipeRight, onSwipeLeft, setCurrentUser} = props;
+  // const userData = JSON.parse(JSON.stringify(data));
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState(currentIndex + 1);
-  const currentProfile = userData[currentIndex];
-  const nextProfile = userData[nextIndex];
+  const currentProfile = data[currentIndex];
+  const nextProfile = data[nextIndex];
 
   const {width: screenWidth} = useWindowDimensions();
   const hiddenTranslateX = screenWidth * 1.5;
@@ -85,13 +85,6 @@ const AnimatedStack = props => {
       translateX.value = context.startX + event.translationX;
     },
     onEnd: event => {
-      // if (event.translationX < -100) {
-      //   translateX.value = withSpring(-500);
-      // } else if (event.translationX > 100) {
-      //   translateX.value = withSpring(500);
-      // } else {
-      //   translateX.value = withSpring(0);
-      // }
       if (Math.abs(event.velocityX) < SWIPE_VELOCITY) {
         translateX.value = withSpring(0);
         return;
@@ -104,7 +97,7 @@ const AnimatedStack = props => {
         },
       );
       const onSwipe = event.velocityX > 0 ? onSwipeRight : onSwipeLeft;
-      runOnJS(onSwipe)(currentProfile);
+      onSwipe && runOnJS(onSwipe)();
     },
   });
 
@@ -112,6 +105,10 @@ const AnimatedStack = props => {
     translateX.value = 0;
     setNextIndex(currentIndex + 1);
   }, [currentIndex, translateX]);
+
+  useEffect(() => {
+    setCurrentUser(currentProfile);
+  }, [currentProfile, setCurrentUser]);
 
   return (
     <GestureHandlerRootView style={styles.root}>
