@@ -18,8 +18,8 @@ const HomeScreen = () => {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [me, setMe] = useState(null);
-  const [myMatchesArray, setMyMatchesArray] = useState(false);
-  const [theirMatchesArray, setTheirMatchesArray] = useState(false);
+  const [isMyMatch, setIsMyMatch] = useState(false);
+  const [isTheirMatch, setisTheirMatch] = useState(false);
 
   useEffect(() => {
     const getCurrentUser = async () => {
@@ -58,44 +58,47 @@ const HomeScreen = () => {
     }
     console.warn('swipe right', currentUser.name);
 
-    const myMatches = await DataStore.query(Match);
+    const myMatches = await DataStore.query(
+      Match,
+      m => m.User1ID.eq(me.id) && m.User2ID.eq(currentUser.id),
+    );
+    console.warn(myMatches.length);
+    if (myMatches.length > 0) {
+      console.warn('You already have a match with this user');
+      return;
+    }
+    console.warn(myMatches.length);
     // loop through all the matches and check if there is a match
-    myMatches.forEach(async match => {
-      if (match.User1ID === me.id && match.User2ID === currentUser.id) {
-        console.warn('You already have a match with this user');
-        setMyMatchesArray(true);
-        return;
-      }
-    });
+    // myMatches.forEach(async match => {
+    //   if (match.User1ID === me.id && match.User2ID === currentUser.id) {
+    //     console.warn('You already have a match with this user');
+    //     setIsMyMatch(true);
+    //     return;
+    //   }
+    // });
 
-    const theirMatches = await DataStore.query(Match);
-    theirMatches.forEach(async match => {
-      setTheirMatchesArray(null);
-      if (match.User1ID === currentUser.id && match.User2ID === me.id) {
-        setTheirMatchesArray(match);
-      }
-    });
+    const theirMatches = await DataStore.query(
+      Match,
+      m => m.User1ID.eq(currentUser.id) && m.User2ID.eq(me.id),
+    );
+    console.warn(theirMatches.length);
 
-    if (theirMatchesArray) {
-      console.warn('You have a match with this user!');
-      const match = theirMatchesArray;
+    if (theirMatches.length > 0) {
+      console.warn('Yay! You have a match');
+      const match = theirMatches[0];
       await DataStore.save(
-        Match.copyOf(match, updated => {
-          updated.isMatch = true;
-        }),
+        Match.copyOf(match, updated => (updated.isMatch = true)),
       );
       return;
     }
 
-    if (!myMatchesArray) {
-      console.warn('sending a match request!');
-      const newMatch = new Match({
-        User1ID: me.id,
-        User2ID: currentUser.id,
-        isMatch: false,
-      });
-      await DataStore.save(newMatch);
-    }
+    console.warn('sending a match request!');
+    const newMatch = new Match({
+      User1ID: me?.id,
+      User2ID: currentUser?.id,
+      isMatch: false,
+    });
+    DataStore.save(newMatch);
   };
 
   return (
