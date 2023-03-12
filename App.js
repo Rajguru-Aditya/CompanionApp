@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, SafeAreaView, Pressable} from 'react-native';
-import {Amplify} from 'aws-amplify';
+import {Amplify, Hub} from 'aws-amplify';
 import config from './src/aws-exports';
 import {withAuthenticator} from 'aws-amplify-react-native';
 import users from './assets/data/users';
@@ -25,6 +25,20 @@ Amplify.configure({
 
 const App = () => {
   const [activeScreen, setActiveScreen] = useState('HOME');
+
+  useEffect(() => {
+    const listener = Hub.listen('datastore', async hubData => {
+      const {
+        event,
+        data: {model},
+      } = hubData.payload;
+      if (event === 'modelSynced') {
+        console.warn(`Model synced: ${model.name}`);
+      }
+    });
+
+    return () => listener();
+  }, []);
 
   const color = '#b5b5b5';
   const activeColor = '#F47C7C';
@@ -87,6 +101,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     width: '100%',
     padding: 10,
+    elevation: 1,
+    backgroundColor: '#fff',
   },
 });
 
