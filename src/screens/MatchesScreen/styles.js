@@ -24,14 +24,30 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    padding: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imageContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 3,
     borderColor: '#F47C7C',
+    padding: 2,
   },
   userImage: {
     width: '100%',
     height: '100%',
     borderRadius: 50,
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#222',
+    marginTop: 5,
+    textAlign: 'center',
   },
 });
 

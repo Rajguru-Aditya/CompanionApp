@@ -24,13 +24,15 @@ const ROTATION = 60;
 const SWIPE_VELOCITY = 800;
 
 const AnimatedStack = props => {
-  const {data, renderItem, onSwipeRight, onSwipeLeft, setCurrentUser} = props;
+  const {data, me, renderItem, onSwipeRight, onSwipeLeft, setCurrentUser} =
+    props;
   // const userData = JSON.parse(JSON.stringify(data));
+  const filteredData = data.filter(item => item?.id !== me?.id);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState(currentIndex + 1);
-  const currentProfile = data[currentIndex];
-  const nextProfile = data[nextIndex];
+  const currentProfile = filteredData[currentIndex];
+  const nextProfile = filteredData[nextIndex];
 
   const {width: screenWidth} = useWindowDimensions();
   const hiddenTranslateX = screenWidth * 1.5;

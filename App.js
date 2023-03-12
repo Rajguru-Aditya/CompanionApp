@@ -43,14 +43,12 @@ const App = () => {
       }
     });
 
-    DataStore.start();
-
     return () => listener();
   }, []);
 
   const renderPage = () => {
     if (activeScreen === 'HOME') {
-      return <HomeScreen />;
+      return <HomeScreen isUserLoading={isUserloading} />;
     }
     if (isUserloading) {
       return <ActivityIndicator size="large" color="#F47C7C" />;

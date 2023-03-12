@@ -14,7 +14,7 @@ import {DataStore} from '@aws-amplify/datastore';
 import {Match, User} from '../../models';
 import {Auth} from 'aws-amplify';
 
-const HomeScreen = () => {
+const HomeScreen = ({isUserLoading}) => {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [me, setMe] = useState(null);
@@ -22,28 +22,32 @@ const HomeScreen = () => {
   const [isTheirMatch, setisTheirMatch] = useState(false);
 
   useEffect(() => {
+    if (isUserLoading) {
+      return;
+    }
     const getCurrentUser = async () => {
       const user = await Auth.currentAuthenticatedUser();
 
       const dbUsers = await DataStore.query(User, u =>
         u.sub.eq(user.attributes.sub),
       );
-      if (dbUsers.length < 0) {
+      if (!dbUsers || dbUsers.length < 0) {
         return;
       }
       setMe(dbUsers[0]);
     };
     getCurrentUser();
-  }, []);
+  }, [isUserLoading]);
 
   useEffect(() => {
     const fetchUsers = async () => {
       const u = await DataStore.query(User);
-      setUsers(u);
+      const filteredUsers = u.filter(user => user.id !== me?.id);
+      setUsers(filteredUsers);
       // console.warn(u);
     };
     fetchUsers();
-  }, []);
+  }, [isUserLoading, me?.id]);
 
   const onSwipeLeft = () => {
     if (!currentUser || !me) {
@@ -58,9 +62,8 @@ const HomeScreen = () => {
     }
     console.warn('swipe right', currentUser.name);
 
-    const myMatches = await DataStore.query(
-      Match,
-      m => m.User1ID.eq(me.id) && m.User2ID.eq(currentUser.id),
+    const myMatches = await DataStore.query(Match, m =>
+      m.and(m1 => [m1.User1ID.eq(me.id), m1.User2ID.eq(currentUser.id)]),
     );
     console.warn(myMatches.length);
     if (myMatches.length > 0) {
@@ -94,10 +97,11 @@ const HomeScreen = () => {
 
     console.warn('sending a match request!');
     const newMatch = new Match({
-      User1ID: me?.id,
-      User2ID: currentUser?.id,
+      User1ID: me.id,
+      User2ID: currentUser.id,
       isMatch: false,
     });
+    console.log(newMatch);
     DataStore.save(newMatch);
   };
 
@@ -109,6 +113,7 @@ const HomeScreen = () => {
         setCurrentUser={setCurrentUser}
         onSwipeLeft={onSwipeLeft}
         onSwipeRight={onSwipeRight}
+        me={me}
       />
       <View style={styles.icons}>
         <View style={styles.icon}>
