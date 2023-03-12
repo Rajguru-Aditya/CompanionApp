@@ -41,7 +41,7 @@ const HomeScreen = ({isUserLoading}) => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const u = await DataStore.query(User);
+      const u = await DataStore.query(User, u => u.gender.eq(me.lookingFor));
       const filteredUsers = u.filter(user => user.id !== me?.id);
       setUsers(filteredUsers);
       // console.warn(u);

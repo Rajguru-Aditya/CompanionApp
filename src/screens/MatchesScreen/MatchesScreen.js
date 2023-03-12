@@ -81,7 +81,7 @@ const MatchesScreen = () => {
     });
     setMatchedUsers(matchedU);
     console.warn('matched users: ', matchedU);
-  }, [matches, me?.id, users]);
+  }, [matches, me, users]);
 
   useEffect(() => {
     const subscription = DataStore.observe(Match).subscribe(msg => {
@@ -98,12 +98,12 @@ const MatchesScreen = () => {
         <Text style={styles.heading}>New Matches</Text>
         <View style={styles.users}>
           {matchedUsers.map(user => (
-            <View style={styles.user} key={user.id}>
+            <View style={styles.user} key={user?.id}>
               <View style={styles.imageContainer}>
-                <Image source={{uri: user.image}} style={styles.userImage} />
+                <Image source={{uri: user?.image}} style={styles.userImage} />
               </View>
-              <Text key={user.id} style={styles.name}>
-                {user.name}
+              <Text key={user?.id} style={styles.name}>
+                {user?.name}
               </Text>
             </View>
           ))}

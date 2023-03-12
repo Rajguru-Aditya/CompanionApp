@@ -16,6 +16,7 @@ const ProfileCard = ({user}) => {
           style={styles.cardInner}>
           <Text style={styles.name}>{user?.name}</Text>
           <Text style={styles.bio}>{user?.bio}</Text>
+          <Text style={styles.bio}>{user?.gender}</Text>
         </LinearGradient>
       </ImageBackground>
     </View>
