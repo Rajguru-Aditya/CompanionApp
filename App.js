@@ -1,7 +1,14 @@
 import 'react-native-gesture-handler';
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, SafeAreaView, Pressable} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  SafeAreaView,
+  Pressable,
+  ActivityIndicator,
+} from 'react-native';
 import {Amplify, Hub} from 'aws-amplify';
+import {DataStore} from '@aws-amplify/datastore';
 import config from './src/aws-exports';
 import {withAuthenticator} from 'aws-amplify-react-native';
 import users from './assets/data/users';
@@ -25,20 +32,36 @@ Amplify.configure({
 
 const App = () => {
   const [activeScreen, setActiveScreen] = useState('HOME');
+  const [isUserloading, setIsUserLoading] = useState(true);
 
   useEffect(() => {
     const listener = Hub.listen('datastore', async hubData => {
-      const {
-        event,
-        data: {model},
-      } = hubData.payload;
-      if (event === 'modelSynced') {
-        console.warn(`Model synced: ${model.name}`);
+      const {event, data} = hubData.payload;
+      if (event === 'modelSynced' && data?.model?.name === 'User') {
+        console.warn(`Model synced: ${data?.model?.name}`);
+        setIsUserLoading(false);
       }
     });
 
+    DataStore.start();
+
     return () => listener();
   }, []);
+
+  const renderPage = () => {
+    if (activeScreen === 'HOME') {
+      return <HomeScreen />;
+    }
+    if (isUserloading) {
+      return <ActivityIndicator size="large" color="#F47C7C" />;
+    }
+    if (activeScreen === 'MATCH') {
+      return <MatchesScreen />;
+    }
+    if (activeScreen === 'PROFILE') {
+      return <ProfileScreen />;
+    }
+  };
 
   const color = '#b5b5b5';
   const activeColor = '#F47C7C';
@@ -75,9 +98,7 @@ const App = () => {
             />
           </Pressable>
         </View>
-        {activeScreen === 'HOME' && <HomeScreen />}
-        {activeScreen === 'MATCH' && <MatchesScreen />}
-        {activeScreen === 'PROFILE' && <ProfileScreen />}
+        {renderPage()}
       </GestureHandlerRootView>
     </SafeAreaView>
   );
