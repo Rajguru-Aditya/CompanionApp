@@ -25,28 +25,31 @@ const ProfileScreen = () => {
   const [bio, setBio] = useState('');
   const [gender, setGender] = useState('');
   const [lookingFor, setLookingFor] = useState('');
+  const [image, setImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
+  const getCurrentUser = async () => {
+    const authUser = await Auth.currentAuthenticatedUser();
+    // check attribute sub
+    const dbUsers = await DataStore.query(User, u =>
+      u.sub.eq(authUser.attributes.sub),
+    );
+
+    if (!dbUsers || dbUsers.length === 0) {
+      console.warn('this  is a new user');
+      return;
+    }
+
+    const dbUser = dbUsers[0];
+    setUser(dbUser);
+
+    setName(dbUser.name);
+    setBio(dbUser.bio);
+    setGender(dbUser.gender);
+    setLookingFor(dbUser.lookingFor);
+    setImage(dbUser.image);
+  };
   useEffect(() => {
-    const getCurrentUser = async () => {
-      const authUser = await Auth.currentAuthenticatedUser();
-      // check attribute sub
-      const dbUsers = await DataStore.query(User, u =>
-        u.sub.eq(authUser.attributes.sub),
-      );
-
-      if (!dbUsers || dbUsers.length === 0) {
-        console.warn('this  is a new user');
-        return;
-      }
-
-      const dbUser = dbUsers[0];
-      setUser(dbUser);
-
-      setName(dbUser.name);
-      setBio(dbUser.bio);
-      setGender(dbUser.gender);
-      setLookingFor(dbUser.lookingFor);
-    };
     getCurrentUser();
   }, []);
 
@@ -107,13 +110,25 @@ const ProfileScreen = () => {
         console.warn('ImagePicker Response: ', response);
         const image = response.assets[0].uri;
         if (user) {
-          const updatedUser = User.copyOf(user, updated => {
-            updated.image = image;
-          });
-          await DataStore.save(updatedUser);
+          // const updatedUser = User.copyOf(user, updated => {
+          //   updated.image = image;
+          // });
+          // await DataStore.save(updatedUser);
+          setSelectedImage(image);
         }
       }
     });
+  };
+
+  const uploadImage = async () => {
+    if (user) {
+      const updatedUser = User.copyOf(user, updated => {
+        updated.image = selectedImage;
+      });
+      await DataStore.save(updatedUser);
+      setSelectedImage(null);
+      await getCurrentUser();
+    }
   };
 
   const signout = async () => {
@@ -125,7 +140,10 @@ const ProfileScreen = () => {
     <SafeAreaView style={styles.root}>
       <ScrollView style={styles.container}>
         <View style={styles.imageContainer}>
-          <Image source={{uri: user?.image}} style={styles.userImage} />
+          <Image
+            source={{uri: selectedImage || image}}
+            style={styles.userImage}
+          />
           <Pressable
             onPress={() => {
               console.warn('Edit profile picture');
@@ -135,6 +153,11 @@ const ProfileScreen = () => {
             <Entypo name="edit" size={30} color={'#fff'} />
           </Pressable>
         </View>
+        <Pressable
+          style={selectedImage ? styles.save : styles.invisible}
+          onPress={uploadImage}>
+          <Text style={styles.btnText}>Upload Image</Text>
+        </Pressable>
         <TextInput
           placeholderTextColor="#aaa"
           onChangeText={setName}
