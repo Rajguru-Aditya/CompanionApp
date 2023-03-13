@@ -7,6 +7,7 @@ import {
   Pressable,
   TextInput,
   Alert,
+  ScrollView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from './styles';
@@ -15,6 +16,8 @@ import {Auth} from 'aws-amplify';
 import {DataStore} from '@aws-amplify/datastore';
 import {User} from '../../models';
 import {Picker} from '@react-native-picker/picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const ProfileScreen = () => {
   const [user, setUser] = useState(null);
@@ -94,6 +97,25 @@ const ProfileScreen = () => {
     Alert.alert('Profile saved successfully');
   };
 
+  const pickImage = async () => {
+    launchImageLibrary({mediaType: 'photo'}, async response => {
+      if (response.didCancel) {
+        console.warn('User cancelled image picker');
+      } else if (response.errorCode) {
+        console.warn('ImagePicker Error: ', response.errorMessage);
+      } else {
+        console.warn('ImagePicker Response: ', response);
+        const image = response.assets[0].uri;
+        if (user) {
+          const updatedUser = User.copyOf(user, updated => {
+            updated.image = image;
+          });
+          await DataStore.save(updatedUser);
+        }
+      }
+    });
+  };
+
   const signout = async () => {
     await DataStore.clear();
     await Auth.signOut();
@@ -101,7 +123,18 @@ const ProfileScreen = () => {
 
   return (
     <SafeAreaView style={styles.root}>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
+        <View style={styles.imageContainer}>
+          <Image source={{uri: user?.image}} style={styles.userImage} />
+          <Pressable
+            onPress={() => {
+              console.warn('Edit profile picture');
+              pickImage();
+            }}
+            style={styles.editImg}>
+            <Entypo name="edit" size={30} color={'#fff'} />
+          </Pressable>
+        </View>
         <TextInput
           placeholderTextColor="#aaa"
           onChangeText={setName}
@@ -150,7 +183,7 @@ const ProfileScreen = () => {
         <Pressable style={styles.signout} onPress={signout}>
           <Text style={styles.btnText}>Sign Out</Text>
         </Pressable>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

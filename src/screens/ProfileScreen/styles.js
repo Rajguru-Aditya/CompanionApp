@@ -8,14 +8,38 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 10,
+    // alignItems: 'center',
   },
   text: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#000',
+    width: '100%',
+    textAlign: 'left',
+  },
+  imageContainer: {
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  userImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 100,
+  },
+  editImg: {
+    width: 45,
+    height: 45,
+    borderRadius: 50,
+    backgroundColor: '#222',
+    position: 'absolute',
+    bottom: 0,
+    right: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textInput: {
     marginVertical: 10,
+    width: '100%',
     height: 40,
     borderColor: '#ccc',
     borderWidth: 1,
@@ -25,6 +49,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     marginVertical: 10,
+    width: '100%',
     height: 'auto',
     borderColor: '#ccc',
     // backgroundColor: '#222',
@@ -33,6 +58,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   save: {
+    width: '100%',
     backgroundColor: '#F47C7C',
     padding: 10,
     borderRadius: 20,
@@ -46,6 +72,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   signout: {
+    width: '100%',
     backgroundColor: '#DC3535',
     padding: 10,
     borderRadius: 20,
