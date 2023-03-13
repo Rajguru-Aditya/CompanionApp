@@ -1,14 +1,23 @@
 import {Text, View, Image, ImageBackground, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './styles';
 import LinearGradient from 'react-native-linear-gradient';
+import {Storage} from 'aws-amplify';
 
 const ProfileCard = ({user}) => {
+  const [imageUrl, setImageUrl] = useState(null);
+
+  useEffect(() => {
+    if (!user?.image?.startsWith('http')) {
+      Storage.get(user?.image).then(setImageUrl);
+    }
+  }, [user]);
+
   return (
     <View style={styles.card} key={user?.id}>
       <ImageBackground
         source={{
-          uri: user?.image || '',
+          uri: imageUrl || '',
         }}
         style={styles.image}>
         <LinearGradient

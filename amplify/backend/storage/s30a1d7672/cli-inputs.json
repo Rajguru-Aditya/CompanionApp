@@ -1,0 +1,15 @@
+{
+  "resourceName": "s30a1d7672",
+  "policyUUID": "0a1d7672",
+  "bucketName": "pickapal0284375e4cb048bea86db1cdef829577",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

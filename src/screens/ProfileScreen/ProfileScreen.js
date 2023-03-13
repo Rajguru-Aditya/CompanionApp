@@ -12,7 +12,8 @@ import {
 import React, {useEffect, useState} from 'react';
 import styles from './styles';
 import users from '../../../assets/data/users';
-import {Auth} from 'aws-amplify';
+import {Auth, Storage} from 'aws-amplify';
+import {S3Image} from 'aws-amplify-react-native';
 import {DataStore} from '@aws-amplify/datastore';
 import {User} from '../../models';
 import {Picker} from '@react-native-picker/picker';
@@ -108,26 +109,51 @@ const ProfileScreen = () => {
         console.warn('ImagePicker Error: ', response.errorMessage);
       } else {
         console.warn('ImagePicker Response: ', response);
-        const image = response.assets[0].uri;
+        const image1 = response.assets[0].uri;
         if (user) {
           // const updatedUser = User.copyOf(user, updated => {
           //   updated.image = image;
           // });
           // await DataStore.save(updatedUser);
-          setSelectedImage(image);
+          setSelectedImage(image1);
         }
       }
     });
   };
 
   const uploadImage = async () => {
+    let newImage = await storeImage();
+    if (selectedImage) {
+      newImage = await storeImage();
+    }
     if (user) {
-      const updatedUser = User.copyOf(user, updated => {
-        updated.image = selectedImage;
-      });
-      await DataStore.save(updatedUser);
-      setSelectedImage(null);
-      await getCurrentUser();
+      if (newImage) {
+        const updatedUser = User.copyOf(user, updated => {
+          updated.image = newImage;
+        });
+        await DataStore.save(updatedUser);
+        setSelectedImage(null);
+        await getCurrentUser();
+      }
+    }
+  };
+
+  const storeImage = async () => {
+    try {
+      const response = await fetch(selectedImage);
+      console.log('response', response);
+      const blob = await response.blob();
+      console.log('blob', blob);
+      const urlParts = selectedImage.split('.');
+      console.log('urlParts', urlParts);
+      const extension = urlParts[urlParts.length - 1];
+      console.log('extension', extension);
+      const key = `${user.id}.${extension}`;
+      console.log('key', key);
+      await Storage.put(key, blob);
+      return key;
+    } catch (e) {
+      console.warn('Error uploading image', e);
     }
   };
 
@@ -136,14 +162,21 @@ const ProfileScreen = () => {
     await Auth.signOut();
   };
 
+  const renderImage = () => {
+    if (selectedImage) {
+      return <Image source={{uri: selectedImage}} style={styles.userImage} />;
+    }
+    if (user?.image?.startsWith('http')) {
+      return <Image source={{uri: image}} style={styles.userImage} />;
+    }
+    return <S3Image imgKey={user?.image} style={styles.userImage} />;
+  };
+
   return (
     <SafeAreaView style={styles.root}>
       <ScrollView style={styles.container}>
         <View style={styles.imageContainer}>
-          <Image
-            source={{uri: selectedImage || image}}
-            style={styles.userImage}
-          />
+          {renderImage()}
           <Pressable
             onPress={() => {
               console.warn('Edit profile picture');
