@@ -51,22 +51,6 @@ const MatchesScreen = () => {
       return;
     }
 
-    // const fetchMatches = async () => {
-    //   // const fetchedMatches = await DataStore.query(User, u =>
-    //   //   u.matches.contains(user.id),
-    //   // );
-    //   // setMatches(fetchedMatches);
-    //   const result = await DataStore.query(Match, match =>
-    //     match.and(m => [
-    //       match.isMatch.eq(true),
-    //       match.or(m1 => [m1.User1ID.eq(me.id), m1.User2ID.eq(me.id)]),
-    //     ]),
-    //   );
-    //   console.warn(result.forEach(r => console.warn(r.User1)));
-    //   setMatches(result);
-    // };
-    // fetchMatches();
-
     fetchMatches();
   }, [me]);
 

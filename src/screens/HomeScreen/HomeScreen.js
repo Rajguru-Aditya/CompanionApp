@@ -20,6 +20,8 @@ const HomeScreen = ({isUserLoading}) => {
   const [me, setMe] = useState(null);
   const [isMyMatch, setIsMyMatch] = useState(false);
   const [isTheirMatch, setisTheirMatch] = useState(false);
+  const [matches, setMatches] = useState([]);
+  const [matchesIDs, setMatchesIDs] = useState(null);
 
   useEffect(() => {
     if (isUserLoading) {
@@ -40,14 +42,46 @@ const HomeScreen = ({isUserLoading}) => {
   }, [isUserLoading]);
 
   useEffect(() => {
+    if (!me) {
+      return;
+    }
+
+    const fetchMatches = async () => {
+      console.log('me: ', me.id);
+      const result = await DataStore.query(
+        Match,
+        m => m.isMatch.eq(true),
+        m => m.or(m1 => [m1.User1ID.eq(me.id), m1.User2ID.eq(me.id)]),
+      );
+      setMatchesIDs(
+        result.map(match =>
+          match.User1ID === me.id ? match.User2ID : match.User1ID,
+        ),
+      );
+      console.log(
+        'matchesIDs: ',
+        result.map(match =>
+          match.User1ID === me.id ? match.User2ID : match.User1ID,
+        ),
+      );
+      console.warn('home screen matches', result);
+      setMatches(result);
+    };
+
+    fetchMatches();
+  }, [me]);
+
+  useEffect(() => {
     const fetchUsers = async () => {
-      const u = await DataStore.query(User, u => u.gender.eq(me.lookingFor));
-      const filteredUsers = u.filter(user => user.id !== me?.id);
+      const u = await DataStore.query(User, u1 => u1.gender.eq(me?.lookingFor));
+      const filteredUsers = u.filter(
+        user => user.id !== me?.id && !matchesIDs.includes(user.id),
+      );
       setUsers(filteredUsers);
       // console.warn(u);
     };
     fetchUsers();
-  }, [isUserLoading, me?.id]);
+  }, [isUserLoading, matchesIDs, me?.id]);
 
   const onSwipeLeft = () => {
     if (!currentUser || !me) {
