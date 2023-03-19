@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React, {useEffect, useState} from 'react';
 import styles from './styles';
-import {View} from 'react-native';
+import {Pressable, View, Text, Image} from 'react-native';
 // import users from '../../../assets/data/users';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -13,6 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {DataStore} from '@aws-amplify/datastore';
 import {Match, User} from '../../models';
 import {Auth} from 'aws-amplify';
+import Modal from 'react-native-modal';
 
 const HomeScreen = ({isUserLoading}) => {
   const [users, setUsers] = useState([]);
@@ -20,6 +21,13 @@ const HomeScreen = ({isUserLoading}) => {
   const [me, setMe] = useState(null);
   const [matches, setMatches] = useState([]);
   const [matchesIDs, setMatchesIDs] = useState(null);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [matchedUser, setMatchedUser] = useState(null);
+
+  const toggleModal = () => {
+    console.log('toggleModal');
+    setModalVisible(!isModalVisible);
+  };
 
   useEffect(() => {
     if (isUserLoading) {
@@ -125,6 +133,8 @@ const HomeScreen = ({isUserLoading}) => {
 
     if (theirMatches.length > 0) {
       console.warn('Yay! You have a match');
+      setMatchedUser(currentUser);
+      toggleModal();
       const match = theirMatches[0];
       await DataStore.save(
         Match.copyOf(match, updated => (updated.isMatch = true)),
@@ -152,17 +162,36 @@ const HomeScreen = ({isUserLoading}) => {
         onSwipeRight={onSwipeRight}
         me={me}
       />
-      <View style={styles.icons}>
-        <View style={styles.icon}>
-          <FontAwesome name="undo" size={30} color="#FBD88B" />
+      <Modal isVisible={isModalVisible}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.yay}>Yay!</Text>
+          <Image
+            source={{
+              uri: 'https://www.pitpat.com/wp-content/uploads/2018/07/Celebrating-500px.png',
+            }}
+            style={styles.userImage}
+          />
+          <Text style={styles.yay}>Its a Match</Text>
+          <Pressable style={styles.ok} onPress={() => toggleModal()}>
+            <Text style={styles.okText}>Ok</Text>
+          </Pressable>
         </View>
+      </Modal>
+      <View style={styles.icons}>
+        <Pressable style={styles.icon}>
+          <FontAwesome name="undo" size={30} color="#FBD88B" />
+        </Pressable>
         <View style={styles.icon}>
           <Entypo name="cross" size={30} color="#F76C6B" />
         </View>
         <View style={styles.icon}>
           <FontAwesome name="star" size={30} color="#3AB4CC" />
         </View>
-        <View style={styles.icon}>
+        <View
+          style={styles.icon}
+          onPress={() => {
+            // Swipe right
+          }}>
           <FontAwesome name="heart" size={30} color="#4FCC94" />
         </View>
         <View style={styles.icon}>

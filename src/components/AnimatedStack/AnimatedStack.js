@@ -1,6 +1,12 @@
 import 'react-native-gesture-handler';
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, useWindowDimensions, Text} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  useWindowDimensions,
+  Text,
+  Pressable,
+} from 'react-native';
 
 import Animated, {
   useSharedValue,
@@ -180,6 +186,24 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     zIndex: 1,
+  },
+  icons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    padding: 10,
+    paddingBottom: 30,
+    marginTop: 50,
+  },
+  icon: {
+    padding: 10,
+    elevation: 5,
+    backgroundColor: 'white',
+    borderRadius: 50,
+    height: 50,
+    width: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
