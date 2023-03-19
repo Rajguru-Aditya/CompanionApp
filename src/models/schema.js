@@ -165,6 +165,24 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "preferredActivity": {
+                    "name": "preferredActivity",
+                    "isArray": false,
+                    "type": {
+                        "enum": "Activities"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "activity": {
+                    "name": "activity",
+                    "isArray": false,
+                    "type": {
+                        "enum": "Activities"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -209,6 +227,19 @@ export const schema = {
         }
     },
     "enums": {
+        "Activities": {
+            "name": "Activities",
+            "values": [
+                "CYCLING",
+                "HIKING",
+                "TREKKING",
+                "CONCERT",
+                "PARTY",
+                "MOVIE",
+                "GYM",
+                "WALK"
+            ]
+        },
         "Genders": {
             "name": "Genders",
             "values": [
@@ -220,5 +251,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.3.6",
-    "version": "7ff71430cf7c5e04a1f666fcb57925ec"
+    "version": "628bd39fcccc194556cc9e68d68771f3"
 };

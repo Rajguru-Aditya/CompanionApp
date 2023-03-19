@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React, {useEffect, useState} from 'react';
 import styles from './styles';
-import {View, StyleSheet} from 'react-native';
+import {View} from 'react-native';
 // import users from '../../../assets/data/users';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -18,8 +18,6 @@ const HomeScreen = ({isUserLoading}) => {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [me, setMe] = useState(null);
-  const [isMyMatch, setIsMyMatch] = useState(false);
-  const [isTheirMatch, setisTheirMatch] = useState(false);
   const [matches, setMatches] = useState([]);
   const [matchesIDs, setMatchesIDs] = useState(null);
 
@@ -73,7 +71,12 @@ const HomeScreen = ({isUserLoading}) => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const u = await DataStore.query(User, u1 => u1.gender.eq(me?.lookingFor));
+      const u = await DataStore.query(User, u1 =>
+        u1.and(u2 => [
+          u2.gender.eq(me?.lookingFor),
+          u2.activity.eq(me?.preferredActivity),
+        ]),
+      );
       const filteredUsers = u.filter(
         user => user.id !== me?.id && !matchesIDs?.includes(user.id),
       );
@@ -81,7 +84,7 @@ const HomeScreen = ({isUserLoading}) => {
       // console.warn(u);
     };
     fetchUsers();
-  }, [isUserLoading, matchesIDs, me?.id]);
+  }, [isUserLoading, matchesIDs, me]);
 
   const onSwipeLeft = () => {
     if (!currentUser || !me) {

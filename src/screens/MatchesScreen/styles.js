@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
+    paddingTop: 20,
   },
   user: {
     width: 100,

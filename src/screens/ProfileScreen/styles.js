@@ -25,6 +25,9 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 100,
+    borderColor: '#F47C7C',
+    borderWidth: 3,
+    padding: 2,
   },
   editImg: {
     width: 45,
@@ -75,6 +78,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#DC3535',
     padding: 10,
+    marginBottom: 50,
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',

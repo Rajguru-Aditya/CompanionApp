@@ -25,6 +25,8 @@ const ProfileScreen = () => {
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
   const [gender, setGender] = useState('');
+  const [activity, setActivity] = useState('');
+  const [preferredActivity, setpreferredActivity] = useState('');
   const [lookingFor, setLookingFor] = useState('');
   const [image, setImage] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -49,6 +51,8 @@ const ProfileScreen = () => {
     setGender(dbUser.gender);
     setLookingFor(dbUser.lookingFor);
     setImage(dbUser.image);
+    setActivity(dbUser.activity);
+    setpreferredActivity(dbUser.preferredActivity);
   };
   useEffect(() => {
     getCurrentUser();
@@ -66,13 +70,35 @@ const ProfileScreen = () => {
     }
   };
 
+  const handleChangeActivity = val => {
+    console.log('val', val);
+    if (val !== 0) {
+      setActivity(val);
+    }
+  };
+
+  const handleChangePreferredActivity = val => {
+    console.log('val', val);
+    if (val !== 0) {
+      setpreferredActivity(val);
+    }
+  };
+
   const isValid = () => {
-    return name && bio && gender && lookingFor;
+    return name && bio && gender && lookingFor && activity && preferredActivity;
   };
 
   const save = async () => {
     if (!isValid()) {
-      console.warn('Please fill all the fields', name, bio, gender, lookingFor);
+      console.warn(
+        'Please fill all the fields',
+        name,
+        bio,
+        gender,
+        lookingFor,
+        activity,
+        preferredActivity,
+      );
       return;
     }
 
@@ -82,6 +108,8 @@ const ProfileScreen = () => {
         updated.bio = bio;
         updated.gender = gender;
         updated.lookingFor = lookingFor;
+        updated.activity = activity;
+        updated.preferredActivity = preferredActivity;
       });
 
       await DataStore.save(updatedUser);
@@ -93,8 +121,11 @@ const ProfileScreen = () => {
         bio,
         gender,
         lookingFor,
+        activity,
+        preferredActivity,
         image:
-          'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim1.JPG',
+          selectedImage ||
+          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
       });
       await DataStore.save(newUser);
     }
@@ -229,6 +260,42 @@ const ProfileScreen = () => {
             <Picker.Item label="Male" value="MALE" />
             <Picker.Item label="Female" value="FEMALE" />
             <Picker.Item label="Other" value="OTHER" />
+          </Picker>
+        </View>
+        <Text style={styles.text}>Your Activity</Text>
+        <View style={styles.picker}>
+          <Picker
+            style={{color: '#000', placeholderTextColor: '#000'}}
+            selectedValue={activity}
+            onValueChange={itemValue => handleChangeActivity(itemValue)}>
+            <Picker.Item label="Select your Activity" value="0" />
+            <Picker.Item label="Cycling" value="CYCLING" />
+            <Picker.Item label="Hiking" value="HIKING" />
+            <Picker.Item label="Trekking" value="TREKKING" />
+            <Picker.Item label="Concert" value="CONCERT" />
+            <Picker.Item label="Movie" value="MOVIE" />
+            <Picker.Item label="Party" value="PARTY" />
+            <Picker.Item label="Gym" value="GYM" />
+            <Picker.Item label="Walk" value="WALK" />
+          </Picker>
+        </View>
+        <Text style={styles.text}>Preferred Activity</Text>
+        <View style={styles.picker}>
+          <Picker
+            style={{color: '#000', placeholderTextColor: '#000'}}
+            selectedValue={preferredActivity}
+            onValueChange={itemValue =>
+              handleChangePreferredActivity(itemValue)
+            }>
+            <Picker.Item label="Select your preferred Activities" value="0" />
+            <Picker.Item label="Cycling" value="CYCLING" />
+            <Picker.Item label="Hiking" value="HIKING" />
+            <Picker.Item label="Trekking" value="TREKKING" />
+            <Picker.Item label="Concert" value="CONCERT" />
+            <Picker.Item label="Movie" value="MOVIE" />
+            <Picker.Item label="Party" value="PARTY" />
+            <Picker.Item label="Gym" value="GYM" />
+            <Picker.Item label="Walk" value="WALK" />
           </Picker>
         </View>
 

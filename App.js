@@ -8,13 +8,9 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {Amplify, Hub} from 'aws-amplify';
-import {DataStore} from '@aws-amplify/datastore';
 import config from './src/aws-exports';
 import {withAuthenticator} from 'aws-amplify-react-native';
-import users from './assets/data/users';
-import ProfileCard from './src/components/ProfileCard/ProfileCard';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import AnimatedStack from './src/components/AnimatedStack/AnimatedStack';
 import HomeScreen from './src/screens/HomeScreen/HomeScreen';
 import MatchesScreen from './src/screens/MatchesScreen/MatchesScreen';
 import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen';

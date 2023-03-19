@@ -1,3 +1,14 @@
+enum Activities {
+  CYCLING
+  HIKING
+  TREKKING
+  CONCERT
+  PARTY
+  MOVIE
+  GYM
+  WALK
+}
+
 type Match @model @auth(rules: [{allow: public}]) {
   id: ID!
   User1: User @hasOne(fields: ["User1ID"])
@@ -21,4 +32,7 @@ type User @model @auth(rules: [{allow: public}]) {
   gender: Genders!
   lookingFor: Genders!
   sub: String!
+  preferredActivity: Activities!
+  activity: Activities!
 }
+ 

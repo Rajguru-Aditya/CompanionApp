@@ -8,8 +8,10 @@ const ProfileCard = ({user}) => {
   const [imageUrl, setImageUrl] = useState(null);
 
   useEffect(() => {
-    if (!user?.image?.startsWith('http')) {
+    if (!user?.image?.startsWith('https')) {
       Storage.get(user?.image).then(setImageUrl);
+    } else {
+      setImageUrl(user?.image);
     }
   }, [user]);
 
