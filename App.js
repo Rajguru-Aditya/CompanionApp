@@ -18,6 +18,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import ChatScreen from './src/screens/ChatScreen/ChatScreen';
 
 Amplify.configure({
   ...config,
@@ -54,6 +55,9 @@ const App = () => {
     }
     if (activeScreen === 'PROFILE') {
       return <ProfileScreen />;
+    }
+    if (activeScreen === 'CHAT') {
+      return <ChatScreen />;
     }
   };
 
