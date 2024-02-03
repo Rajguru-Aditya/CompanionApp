@@ -87,10 +87,28 @@ const ChatScreen = ({isUserLoading}) => {
           <Image
             style={styles.chatTabUserIcon}
             source={{
-              uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
+              uri: 'https://images7.alphacoders.com/393/393842.jpg',
             }}
           />
-          <Text style={styles.chatTabUsername}>Chat</Text>
+          <Text style={styles.chatTabUsername}>Saurabh Sapkal</Text>
+        </Pressable>
+        <Pressable style={styles.chatTabContainer}>
+          <Image
+            style={styles.chatTabUserIcon}
+            source={{
+              uri: 'https://images4.alphacoders.com/538/53836.jpg',
+            }}
+          />
+          <Text style={styles.chatTabUsername}>Ritvik Gavand</Text>
+        </Pressable>
+        <Pressable style={styles.chatTabContainer}>
+          <Image
+            style={styles.chatTabUserIcon}
+            source={{
+              uri: 'https://www.asiamediajournal.com/wp-content/uploads/2022/10/Naruto-Uzumaki-PFP.jpg',
+            }}
+          />
+          <Text style={styles.chatTabUsername}>Faiz Shaikh</Text>
         </Pressable>
       </View>
     </GestureHandlerRootView>

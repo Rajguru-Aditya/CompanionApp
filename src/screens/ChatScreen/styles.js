@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginTop: 50,
     padding: 10,
+    gap: 10,
   },
   chatTabContainer: {
     width: '100%',

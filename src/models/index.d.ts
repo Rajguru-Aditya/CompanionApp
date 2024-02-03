@@ -27,8 +27,8 @@ type EagerMatch = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly User1?: User | null;
-  readonly User2?: User | null;
+  readonly User1: User;
+  readonly User2: User;
   readonly User1ID: string;
   readonly User2ID: string;
   readonly isMatch: boolean;
@@ -42,8 +42,8 @@ type LazyMatch = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly User1: AsyncItem<User | undefined>;
-  readonly User2: AsyncItem<User | undefined>;
+  readonly User1: AsyncItem<User>;
+  readonly User2: AsyncItem<User>;
   readonly User1ID: string;
   readonly User2ID: string;
   readonly isMatch: boolean;
